@@ -12,22 +12,32 @@ class TemperatureData extends React.Component {
     this.state = { 
       prop: "What's up",
       date: '',
+      isLoading: true,
+      tempData: [],
     };
   }
 
   componentDidMount(){
-    let dateToday = moment().subtract(2, 'days').format('YYYY-MM-DD');
-    this.setState({
-      date: dateToday
-    }, this.getDailyWeatherData)
+    this.getDailyWeatherData();
   }
 
-  getDailyWeatherData(){
-    const url = `${apiUrl}?station=${station}&start=${this.state.date}&end=${this.state.date}&key=${apiKey}`;
-    axios.get(url)
-      .then((res) => {
-        this.calculateAverageTemp(res.data.data[0]);
-      })
+  async getDailyWeatherData(){
+    let startingDate = '20200101';
+    let arr = [];
+    for (let i = 0; i < 5; i++){
+      let initialPlus = moment(startingDate).add(i, 'days');
+      let date = initialPlus.format('YYYY-MM-DD');
+      const url = `${apiUrl}?station=${station}&start=${date}&end=${date}&key=${apiKey}`;
+      const data = await axios.get(url);
+      let result = this.calculateAverageTemp(data.data.data[0]);
+      let formattedDate = initialPlus.format('ll');
+      let obj = {"date": formattedDate, "avg_temp": result};
+      arr.push(obj);
+    }
+    this.setState({
+      tempData: arr,
+      isLoading: false
+    })
   }
 
   calculateAverageTemp(data){
@@ -44,9 +54,23 @@ class TemperatureData extends React.Component {
     return (temp * (9/5) + 32);
   }
 
+  renderData(){
+    const { tempData } = this.state;
+    for (let i = 0; i < 30; i++){
+      return (
+        tempData.map((item) => (
+          <div>{item.date}: {item.avg_temp}</div>
+        ))
+      )
+    }
+  }
+
   render() {
-    return (
-    <div>{this.state.prop}, I'm where the temperature data goes.</div>
+    const { isLoading } = this.state;
+    return isLoading ? (
+      <div>Loading...</div>
+    ) : (
+    <div>{this.renderData()}</div>
     );
   }
 }
