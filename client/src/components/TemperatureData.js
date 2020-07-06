@@ -6,6 +6,18 @@ const apiKey = process.env.REACT_APP_API_KEY;
 const station = process.env.REACT_APP_WEATHER_STATION;
 const apiUrl = process.env.REACT_APP_API_URL;
 
+/*
+
+TODO: Do more shopping around for APIs
+TODO: Double-check values being returned as averages
+TODO: Write a test for logic
+TODO: Set color ranges
+TODO: Connect color ranges and averages
+TODO: Display it all in a way that doesn't suck
+TODO: God, so many things. Database? Ability to cross off finished rows?
+
+*/
+
 class TemperatureData extends React.Component {
   constructor(props) {
     super(props);
