@@ -33,22 +33,22 @@ class TemperatureData extends React.Component {
     let startingDate = '20200101';
     let arr = [];
     let endOfLoop = this.daysElapsedSinceStart(startingDate)
-    for (let i = 0; i < endOfLoop; i++){
-      let initialPlus = moment(startingDate).add(i, 'days');
-      let date = initialPlus.format('YYYY-MM-DD');
-      const url = `${apiUrl}?station=${station}&start=${date}&end=${date}&key=${apiKey}`;
-      const data = await axios.get(url);
-      let result = this.calculateAverageTemp(data.data.data[0]);
-      console.log(`${i} ${result}`);
-      let color = this.determineColor(result);
-      let formattedDate = initialPlus.format('ll');
-      let obj = {"date": formattedDate, "avg_temp": result, "color": color};
-      arr.push(obj);
-    }
-    this.setState({
-      tempData: arr,
-      isLoading: false
-    })
+    // for (let i = 0; i < endOfLoop; i++){
+    //   let initialPlus = moment(startingDate).add(i, 'days');
+    //   let date = initialPlus.format('YYYY-MM-DD');
+    //   const url = `${apiUrl}?station=${station}&start=${date}&end=${date}&key=${apiKey}`;
+    //   const data = await axios.get(url);
+    //   let result = this.calculateAverageTemp(data.data.data[0]);
+    //   console.log(`${i} ${result}`);
+    //   let color = this.determineColor(result);
+    //   let formattedDate = initialPlus.format('ll');
+    //   let obj = {"date": formattedDate, "avg_temp": result, "color": color};
+    //   arr.push(obj);
+    // }
+    // this.setState({
+    //   tempData: arr,
+    //   isLoading: false
+    // })
   }
 
   daysElapsedSinceStart(startingDate){
