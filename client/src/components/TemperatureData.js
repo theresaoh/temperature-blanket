@@ -8,6 +8,9 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 /*
 
+TODO: clean up server/package.json
+TODO: seed db 160 values at a time 
+TODO: pull all temp values from db
 TODO: Double-check values being returned as averages
 TODO: Write a test for logic
 TODO: Display it all in a way that doesn't suck
