@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 
 const user = process.env.PGUSER;
 const pass = process.env.PGPASS;
@@ -15,20 +16,23 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3001");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
 
-app.post('/api/world', (req, res) => {
-  console.log(req.body);
+app.get('/api/world', (req, res) => {
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.post}`,
   );
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-console.log(user);
 
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -39,15 +43,25 @@ const pool = new Pool({
   port: dbPort,
 })
 
+app.post('/api/user', cors(), (req, res) => {
+  pool.connect()
+  .then(() => {
+    console.log("user: ", req.body);
+    var sql = `INSERT INTO user (email, password) VALUES (?, ?, ?, ?, ?, ?)`;
+    // pool.query(sql, [], (error, results) => {
+    //   if (error) {
+    //     throw error
+    //   }
+    // })
+  })
+});
+
 async function callIt () {
   await pool.connect();
   pool.query('SELECT * FROM users', (error, results) => {
     if (error) {
       throw error
     }
-    console.log(results.rows)
+    console.log("hey there ", results.rows)
   })
 }
-
-callIt();
-

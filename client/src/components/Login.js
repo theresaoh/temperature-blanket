@@ -1,5 +1,8 @@
 import React from 'react';
 import '../styles/login.css';
+import axios from 'axios';
+
+const apiUrl = process.env.REACT_APP_SERVER_URL;
 
 class Login extends React.Component {
   constructor(props) {
@@ -13,7 +16,14 @@ class Login extends React.Component {
 
   submitForm = async (event) => {
     event.preventDefault();
-    console.log("sup");
+    const { email, password } = this.state;
+    axios.post(`${apiUrl}/api/user`, {
+      email: email,
+      password: password
+    });
+    axios.get(`${apiUrl}/api/world`)
+    .then(res => {console.log(res)})
+    
   }
 
   onInputChange = async (event) => {
@@ -27,7 +37,7 @@ class Login extends React.Component {
     return (
       <div id="login-component">
         <div>Login</div>
-        <form className="login-form" onSubmit={(event) => {this.submitForm()}}>
+        <form className="login-form">
           <div className="row">
             <label htmlFor="email">Email</label>
             <input id="email" name="email" onChange={(event) => {this.onInputChange(event)}}></input>
@@ -41,7 +51,7 @@ class Login extends React.Component {
             <input type="password" id="confirmPassword" name="confirm-password" onChange={(event) => {this.onInputChange(event)}}></input>
           </div>
           <div className="button">
-            <button>Log In</button>
+            <button onClick={(event) => {this.submitForm(event)}}>Log In</button>
           </div>
         </form>
       </div>
